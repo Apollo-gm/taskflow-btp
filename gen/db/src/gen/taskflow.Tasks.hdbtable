@@ -1,0 +1,12 @@
+COLUMN TABLE taskflow_Tasks (
+  ID NVARCHAR(36) NOT NULL,
+  title NVARCHAR(100),
+  description NVARCHAR(500),
+  status NVARCHAR(20),
+  priority NVARCHAR(20),
+  responsible NVARCHAR(100),
+  createdAt TIMESTAMP,
+  criticality_status INTEGER,
+  criticality_priority INTEGER,
+  PRIMARY KEY(ID)
+)

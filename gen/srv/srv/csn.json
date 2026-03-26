@@ -1,0 +1,526 @@
+{
+  "namespace": "taskflow",
+  "definitions": {
+    "taskflow.Tasks": {
+      "kind": "entity",
+      "elements": {
+        "ID": {
+          "key": true,
+          "type": "cds.UUID"
+        },
+        "title": {
+          "@title": "Título",
+          "@mandatory": true,
+          "type": "cds.String",
+          "length": 100
+        },
+        "description": {
+          "@title": "Descrição",
+          "@mandatory": true,
+          "type": "cds.String",
+          "length": 500
+        },
+        "status": {
+          "@title": "Status",
+          "@mandatory": true,
+          "type": "cds.String",
+          "length": 20
+        },
+        "priority": {
+          "@title": "Prioridade",
+          "@mandatory": true,
+          "type": "cds.String",
+          "length": 20
+        },
+        "responsible": {
+          "@title": "Responsável",
+          "@mandatory": true,
+          "type": "cds.String",
+          "length": 100
+        },
+        "createdAt": {
+          "@title": "Criado em",
+          "type": "cds.Timestamp"
+        },
+        "criticality_status": {
+          "@Core.Computed": true,
+          "type": "cds.Integer"
+        },
+        "criticality_priority": {
+          "@Core.Computed": true,
+          "type": "cds.Integer"
+        }
+      }
+    },
+    "taskflow.StatusValues": {
+      "kind": "entity",
+      "elements": {
+        "code": {
+          "key": true,
+          "type": "cds.String",
+          "length": 20
+        },
+        "name": {
+          "type": "cds.String",
+          "length": 50
+        }
+      }
+    },
+    "taskflow.PriorityValues": {
+      "kind": "entity",
+      "elements": {
+        "code": {
+          "key": true,
+          "type": "cds.String",
+          "length": 20
+        },
+        "name": {
+          "type": "cds.String",
+          "length": 50
+        }
+      }
+    },
+    "TaskService": {
+      "@source": "srv/task-service.cds",
+      "kind": "service"
+    },
+    "TaskService.Tasks": {
+      "kind": "entity",
+      "@Capabilities.InsertRestrictions.Insertable": true,
+      "@Capabilities.DeleteRestrictions.Deletable": true,
+      "@UI.HeaderInfo.TypeName": "Tarefa",
+      "@UI.HeaderInfo.TypeNamePlural": "Tarefas",
+      "@UI.HeaderInfo.Title.Value": {
+        "=": "title"
+      },
+      "@UI.HeaderInfo.Description.Value": {
+        "=": "responsible"
+      },
+      "@UI.SelectionFields": [
+        {
+          "=": "status"
+        },
+        {
+          "=": "priority"
+        },
+        {
+          "=": "responsible"
+        }
+      ],
+      "@UI.LineItem": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "title"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "status"
+          },
+          "Criticality": {
+            "=": "criticality_status"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "priority"
+          },
+          "Criticality": {
+            "=": "criticality_priority"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "responsible"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "createdAt"
+          }
+        }
+      ],
+      "@UI.HeaderFacets": [
+        {
+          "$Type": "UI.ReferenceFacet",
+          "ID": "HeaderSummary",
+          "Label": "Resumo da Tarefa",
+          "Target": "@UI.FieldGroup#HeaderSummary"
+        }
+      ],
+      "@UI.FieldGroup#HeaderSummary.$Type": "UI.FieldGroupType",
+      "@UI.FieldGroup#HeaderSummary.Data": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "title"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "status"
+          },
+          "Criticality": {
+            "=": "criticality_status"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "priority"
+          },
+          "Criticality": {
+            "=": "criticality_priority"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "responsible"
+          }
+        }
+      ],
+      "@UI.Facets": [
+        {
+          "$Type": "UI.CollectionFacet",
+          "ID": "OverviewSection",
+          "Label": "Visão Geral",
+          "Facets": [
+            {
+              "$Type": "UI.ReferenceFacet",
+              "ID": "FacetDescription",
+              "Label": "Descrição",
+              "Target": "@UI.FieldGroup#Description"
+            },
+            {
+              "$Type": "UI.ReferenceFacet",
+              "ID": "FacetStatus",
+              "Label": "Status e Prioridade",
+              "Target": "@UI.FieldGroup#Execution"
+            }
+          ]
+        },
+        {
+          "$Type": "UI.CollectionFacet",
+          "ID": "OwnershipSection",
+          "Label": "Responsável",
+          "Facets": [
+            {
+              "$Type": "UI.ReferenceFacet",
+              "ID": "FacetOwner",
+              "Label": "Responsabilidade",
+              "Target": "@UI.FieldGroup#Owner"
+            }
+          ]
+        },
+        {
+          "$Type": "UI.CollectionFacet",
+          "ID": "SystemSection",
+          "Label": "Informações do Sistema",
+          "Facets": [
+            {
+              "$Type": "UI.ReferenceFacet",
+              "ID": "FacetMetadata",
+              "Label": "Metadados",
+              "Target": "@UI.FieldGroup#Metadata"
+            }
+          ]
+        }
+      ],
+      "@UI.FieldGroup#Description.$Type": "UI.FieldGroupType",
+      "@UI.FieldGroup#Description.Data": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "title"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "description"
+          }
+        }
+      ],
+      "@UI.FieldGroup#Execution.$Type": "UI.FieldGroupType",
+      "@UI.FieldGroup#Execution.Data": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "status"
+          },
+          "Criticality": {
+            "=": "criticality_status"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "priority"
+          },
+          "Criticality": {
+            "=": "criticality_priority"
+          }
+        }
+      ],
+      "@UI.FieldGroup#Owner.$Type": "UI.FieldGroupType",
+      "@UI.FieldGroup#Owner.Data": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "responsible"
+          }
+        }
+      ],
+      "@UI.FieldGroup#Metadata.$Type": "UI.FieldGroupType",
+      "@UI.FieldGroup#Metadata.Data": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "ID"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "createdAt"
+          }
+        }
+      ],
+      "@UI.Identification": [
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "title"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "description"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "status"
+          },
+          "Criticality": {
+            "=": "criticality_status"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "priority"
+          },
+          "Criticality": {
+            "=": "criticality_priority"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "responsible"
+          }
+        },
+        {
+          "$Type": "UI.DataField",
+          "Value": {
+            "=": "createdAt"
+          }
+        }
+      ],
+      "projection": {
+        "from": {
+          "ref": [
+            "taskflow.Tasks"
+          ]
+        }
+      },
+      "elements": {
+        "ID": {
+          "key": true,
+          "type": "cds.UUID"
+        },
+        "title": {
+          "@title": "Título",
+          "@mandatory": true,
+          "type": "cds.String",
+          "length": 100
+        },
+        "description": {
+          "@UI.MultiLineText": true,
+          "@title": "Descrição",
+          "@mandatory": true,
+          "type": "cds.String",
+          "length": 500
+        },
+        "status": {
+          "@Common.Label": "Status",
+          "@Common.ValueList.CollectionPath": "StatusValues",
+          "@Common.ValueList.Parameters": [
+            {
+              "$Type": "Common.ValueListParameterOut",
+              "LocalDataProperty": {
+                "=": "status"
+              },
+              "ValueListProperty": "code"
+            },
+            {
+              "$Type": "Common.ValueListParameterDisplayOnly",
+              "ValueListProperty": "name"
+            }
+          ],
+          "@title": "Status",
+          "@mandatory": true,
+          "type": "cds.String",
+          "length": 20
+        },
+        "priority": {
+          "@Common.Label": "Prioridade",
+          "@Common.ValueList.CollectionPath": "PriorityValues",
+          "@Common.ValueList.Parameters": [
+            {
+              "$Type": "Common.ValueListParameterOut",
+              "LocalDataProperty": {
+                "=": "priority"
+              },
+              "ValueListProperty": "code"
+            },
+            {
+              "$Type": "Common.ValueListParameterDisplayOnly",
+              "ValueListProperty": "name"
+            }
+          ],
+          "@title": "Prioridade",
+          "@mandatory": true,
+          "type": "cds.String",
+          "length": 20
+        },
+        "responsible": {
+          "@title": "Responsável",
+          "@mandatory": true,
+          "type": "cds.String",
+          "length": 100
+        },
+        "createdAt": {
+          "@title": "Criado em",
+          "type": "cds.Timestamp"
+        },
+        "criticality_status": {
+          "@Core.Computed": true,
+          "type": "cds.Integer"
+        },
+        "criticality_priority": {
+          "@Core.Computed": true,
+          "type": "cds.Integer"
+        }
+      }
+    },
+    "TaskService.StatusValues": {
+      "kind": "entity",
+      "@readonly": true,
+      "projection": {
+        "from": {
+          "ref": [
+            "taskflow.StatusValues"
+          ]
+        }
+      },
+      "elements": {
+        "code": {
+          "key": true,
+          "type": "cds.String",
+          "length": 20
+        },
+        "name": {
+          "type": "cds.String",
+          "length": 50
+        }
+      }
+    },
+    "TaskService.PriorityValues": {
+      "kind": "entity",
+      "@readonly": true,
+      "projection": {
+        "from": {
+          "ref": [
+            "taskflow.PriorityValues"
+          ]
+        }
+      },
+      "elements": {
+        "code": {
+          "key": true,
+          "type": "cds.String",
+          "length": 20
+        },
+        "name": {
+          "type": "cds.String",
+          "length": 50
+        }
+      }
+    },
+    "cds.outbox.Messages": {
+      "kind": "entity",
+      "elements": {
+        "ID": {
+          "key": true,
+          "type": "cds.UUID"
+        },
+        "timestamp": {
+          "type": "cds.Timestamp"
+        },
+        "target": {
+          "type": "cds.String"
+        },
+        "msg": {
+          "type": "cds.LargeString"
+        },
+        "attempts": {
+          "type": "cds.Integer",
+          "default": {
+            "val": 0
+          }
+        },
+        "partition": {
+          "type": "cds.Integer",
+          "default": {
+            "val": 0
+          }
+        },
+        "lastError": {
+          "type": "cds.LargeString"
+        },
+        "lastAttemptTimestamp": {
+          "type": "cds.Timestamp"
+        },
+        "status": {
+          "type": "cds.String",
+          "length": 23
+        },
+        "task": {
+          "type": "cds.String",
+          "length": 255
+        },
+        "appid": {
+          "type": "cds.String",
+          "length": 255
+        }
+      }
+    }
+  },
+  "meta": {
+    "creator": "CDS Compiler v6.8.0",
+    "compilerCsnFlavor": "inferred",
+    "flavor": "inferred"
+  },
+  "$version": "2.0"
+}

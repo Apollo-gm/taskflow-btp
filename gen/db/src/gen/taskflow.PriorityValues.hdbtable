@@ -1,0 +1,5 @@
+COLUMN TABLE taskflow_PriorityValues (
+  code NVARCHAR(20) NOT NULL,
+  name NVARCHAR(50),
+  PRIMARY KEY(code)
+)

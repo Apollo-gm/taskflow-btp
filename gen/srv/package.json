@@ -1,0 +1,23 @@
+{
+  "name": "taskflow-btp",
+  "version": "1.0.0",
+  "dependencies": {
+    "@cap-js/hana": "^2",
+    "@sap/cds": "^9"
+  },
+  "devDependencies": {
+    "@cap-js/sqlite": "^2",
+    "@sap/cds-dk": "^9"
+  },
+  "scripts": {
+    "start": "cds-serve",
+    "watch-taskflow-ui": "cds watch --open taskflow.ui.taskflowui/index.html?sap-ui-xx-viewCache=false --livereload false"
+  },
+  "private": true,
+  "sapux": [
+    "app/taskflow-ui"
+  ],
+  "engines": {
+    "node": ">=20"
+  }
+}

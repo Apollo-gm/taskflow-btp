@@ -1,0 +1,11 @@
+VIEW TaskService_Tasks AS SELECT
+  Tasks_0.ID,
+  Tasks_0.title,
+  Tasks_0.description,
+  Tasks_0.status,
+  Tasks_0.priority,
+  Tasks_0.responsible,
+  Tasks_0.createdAt,
+  Tasks_0.criticality_status,
+  Tasks_0.criticality_priority
+FROM taskflow_Tasks AS Tasks_0

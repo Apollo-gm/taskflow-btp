@@ -1,0 +1,4 @@
+VIEW TaskService_StatusValues AS SELECT
+  StatusValues_0.code,
+  StatusValues_0.name
+FROM taskflow_StatusValues AS StatusValues_0

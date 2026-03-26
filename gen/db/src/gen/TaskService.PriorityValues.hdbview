@@ -1,0 +1,4 @@
+VIEW TaskService_PriorityValues AS SELECT
+  PriorityValues_0.code,
+  PriorityValues_0.name
+FROM taskflow_PriorityValues AS PriorityValues_0
