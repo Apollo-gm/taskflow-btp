@@ -1,0 +1,145 @@
+{
+  "_version": "1.83.0",
+  "sap.app": {
+    "id": "taskflow.ui.taskflowui",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:lrop",
+      "version": "1.21.0",
+      "toolsId": "f8baf69c-439e-416e-a2bb-8678d27e6327"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/odata/v4/task/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "odataVersion": "4.01"
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "sap-icon://task"
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": false
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.146.0",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.fe.templates": {},
+        "sap.ui.layout": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "taskflow.ui.taskflowui.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      }
+    },
+    "routing": {
+      "routes": [
+        {
+          "pattern": ":?query:",
+          "name": "TasksList",
+          "target": "TasksList"
+        },
+        {
+          "pattern": "Tasks({key}):?query:",
+          "name": "TasksObjectPage",
+          "target": "TasksObjectPage"
+        }
+      ],
+      "targets": {
+        "TasksList": {
+          "type": "Component",
+          "id": "TasksList",
+          "name": "sap.fe.templates.ListReport",
+          "options": {
+            "settings": {
+              "contextPath": "/Tasks",
+              "variantManagement": "None",
+              "initialLoad": "Enabled",
+              "navigation": {
+                "Tasks": {
+                  "detail": {
+                    "route": "TasksObjectPage"
+                  }
+                }
+              },
+              "controlConfiguration": {
+                "@com.sap.vocabularies.UI.v1.LineItem": {
+                  "tableSettings": {
+                    "type": "ResponsiveTable",
+                    "selectionMode": "Single",
+                    "condensedTableLayout": true
+                  },
+                  "actions": {
+                    "AddTask": {
+                      "text": "{i18n>createButtonText}",
+                      "press": "taskflow.ui.taskflowui.ext.controller.ListReportExt.onOpenCreateDialog",
+                      "requiresSelection": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "TasksObjectPage": {
+          "type": "Component",
+          "id": "TasksObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/Tasks",
+              "showAnchorBar": true,
+              "sectionLayout": "Tabs"
+            }
+          }
+        }
+      }
+    }
+  },
+  "sap.fiori": {
+    "archeType": "transactional"
+  },
+  "sap.fe": {
+    "app": {
+      "enableLazyLoading": true
+    }
+  }
+}

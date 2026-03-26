@@ -1,0 +1,28 @@
+{
+  "generationParameters": {
+    "generationDate": "Tue Mar 24 2026 18:26:32 GMT+0000 (Coordinated Universal Time)",
+    "generatorPlatform": "SAP Business Application Studio",
+    "serviceType": "Local CAP",
+    "metadataFilename": "",
+    "serviceUrl": "http://localhost:4004/odata/v4/task/",
+    "appName": "taskflow-ui",
+    "appTitle": "Dashboard BTP",
+    "appDescription": "Dashboard created to learn more about SAP fiori and CAP on real aplications.",
+    "appNamespace": "taskflow.ui",
+    "ui5Theme": "sap_horizon",
+    "ui5Version": "1.146.0",
+    "enableEslint": false,
+    "enableTypeScript": false,
+    "showMockDataInfo": false,
+    "generatorVersion": "1.21.0",
+    "template": "List Report Page V4",
+    "generatorName": "SAP Fiori Application Generator",
+    "entityRelatedConfig": [
+      {
+        "type": "Main Entity",
+        "value": "Tasks"
+      }
+    ],
+    "launchText": "To launch the generated app, start your CAP project:  and navigate to the following location in your browser:\n\nhttp://localhost:4004/taskflow-ui/webapp/index.html"
+  }
+}
