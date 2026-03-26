@@ -3,6 +3,28 @@ const { randomUUID } = require('crypto');
 
 module.exports = cds.service.impl(async function () {
     const { Tasks } = this.entities;
+    this.on('READ', Tasks, () => {
+    return [
+        {
+            ID: '1',
+            title: 'Tarefa Teste 1',
+            description: 'Descrição teste',
+            status: 'TO-DO',
+            priority: 'HIGH',
+            responsible: 'Guilherme',
+            createdAt: new Date().toISOString()
+        },
+        {
+            ID: '2',
+            title: 'Tarefa Teste 2',
+            description: 'Outra tarefa',
+            status: 'DOING',
+            priority: 'MEDIUM',
+            responsible: 'Equipe',
+            createdAt: new Date().toISOString()
+        }
+    ];
+});
 
     this.before('CREATE', Tasks, (req) => {
         const data = req.data;

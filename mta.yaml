@@ -1,15 +1,17 @@
 _schema-version: 3.3.0
 ID: taskflow-btp
 version: 1.0.0
-description: "A simple CAP project."
+description: "Taskflow BTP project."
 parameters:
   enable-parallel-deployments: true
+
 build-parameters:
   before-all:
     - builder: custom
       commands:
         - npm ci
         - npx cds build --production
+
 modules:
   - name: taskflow-btp-srv
     type: nodejs
@@ -17,10 +19,11 @@ modules:
     parameters:
       instances: 1
       buildpack: nodejs_buildpack
+      host: taskflow-btp-gua
     build-parameters:
       builder: npm-ci
     provides:
-      - name: srv-api # required by consumers of CAP services (e.g. approuter)
+      - name: srv-api
         properties:
           srv-url: ${default-url}
     requires:
@@ -33,6 +36,26 @@ modules:
       buildpack: nodejs_buildpack
     requires:
       - name: taskflow-btp-db
+
+  - name: taskflow-btp-router
+    type: approuter.nodejs
+    path: app/router
+    parameters:
+      memory: 256M
+      disk-quota: 256M
+      host: taskflow-btp-ui-gua
+      keep-existing-routes: true
+    build-parameters:
+      builder: custom
+      commands:
+        - npm install --production
+    requires:
+      - name: srv-api
+        group: destinations
+        properties:
+          name: srv-api
+          url: ~{srv-url}
+          forwardAuthToken: false
 
 resources:
   - name: taskflow-btp-db
