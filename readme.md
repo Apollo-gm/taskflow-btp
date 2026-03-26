@@ -1,22 +1,48 @@
-# Getting Started
+# 🚀 Taskflow BTP
 
-Welcome to your new CAP project.
+Aplicação de gerenciamento de tarefas desenvolvida com SAP CAP + SAP Fiori Elements.
 
-It contains these folders and files, following our recommended project layout:
+## 📌 Funcionalidades
 
-File or Folder | Purpose
----------|----------
-`app/` | content for UI frontends goes here
-`db/` | your domain models and data go here
-`srv/` | your service models and code go here
-`readme.md` | this getting started guide
+- Listagem de tarefas
+- Criação de novas tarefas via modal
+- Status e prioridade com indicadores visuais
+- Página de detalhes (Object Page)
+- Organização por responsável
 
-## Next Steps
+## 🧱 Tecnologias
 
-- Open a new terminal and run `cds watch`
-- (in VS Code simply choose _**Terminal** > Run Task > cds watch_)
-- Start with your domain model, in a CDS file in `db/`
+- SAP CAP (Node.js)
+- OData V4
+- SAP Fiori Elements
+- SAP Business Application Studio
+- Cloud Foundry (deploy)
 
-## Learn More
+1. Instalar dependências
+   ```bash
+   npm install
 
-Learn more at <https://cap.cloud.sap>.
+3. Rodar backend (CAP)
+cds watch
+4. Acessar aplicação
+
+Abrir via BAS ou acessar:
+
+http://localhost:4004
+📡 Endpoint OData
+/odata/v4/task/Tasks
+📂 Estrutura do projeto
+app/   → frontend (Fiori)
+db/    → modelos CDS
+srv/   → serviços (CAP)
+👥 Colaboração
+
+Projeto desenvolvido em dupla, com separação de responsabilidades:
+
+Frontend: UI5 / Fiori Elements
+Backend: CAP / OData / BTP
+🎯 Objetivo
+
+Criar uma aplicação simples, funcional e bem estruturada, focando em entendimento real das tecnologias SAP e boas práticas de desenvolvimento.
+## ▶️ Como rodar o projeto
+
