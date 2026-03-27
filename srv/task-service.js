@@ -1,40 +1,21 @@
 const cds = require('@sap/cds');
-const { randomUUID } = require('crypto');
 
-module.exports = cds.service.impl(async function () {
+module.exports = cds.service.impl(function () {
     const { Tasks } = this.entities;
-    this.on('READ', Tasks, () => {
-    return [
-        {
-            ID: '1',
-            title: 'Tarefa Teste 1',
-            description: 'Descrição teste',
-            status: 'TO-DO',
-            priority: 'HIGH',
-            responsible: 'Guilherme',
-            createdAt: new Date().toISOString()
-        },
-        {
-            ID: '2',
-            title: 'Tarefa Teste 2',
-            description: 'Outra tarefa',
-            status: 'DOING',
-            priority: 'MEDIUM',
-            responsible: 'Equipe',
-            createdAt: new Date().toISOString()
-        }
-    ];
-});
 
     this.before('CREATE', Tasks, (req) => {
         const data = req.data;
 
-        if (!data.ID) {
-            data.ID = randomUUID();
+        if (!data.title || !data.title.trim()) {
+            req.reject(400, 'O título é obrigatório.');
         }
 
-        if (!data.createdAt) {
-            data.createdAt = new Date().toISOString();
+        if (!data.description || !data.description.trim()) {
+            req.reject(400, 'A descrição é obrigatória.');
+        }
+
+        if (!data.responsible || !data.responsible.trim()) {
+            req.reject(400, 'O responsável é obrigatório.');
         }
 
         if (!data.status) {
@@ -44,17 +25,21 @@ module.exports = cds.service.impl(async function () {
         if (!data.priority) {
             data.priority = 'MEDIUM';
         }
+    });
 
-        if (!data.title || !data.title.trim()) {
-            return req.reject(400, 'O título da tarefa é obrigatório.');
+    this.before('UPDATE', Tasks, (req) => {
+        const data = req.data;
+
+        if ('title' in data && (!data.title || !data.title.trim())) {
+            req.reject(400, 'O título não pode ficar vazio.');
         }
 
-        if (!data.description || !data.description.trim()) {
-            return req.reject(400, 'A descrição da tarefa é obrigatória.');
+        if ('description' in data && (!data.description || !data.description.trim())) {
+            req.reject(400, 'A descrição não pode ficar vazia.');
         }
 
-        if (!data.responsible || !data.responsible.trim()) {
-            return req.reject(400, 'O responsável pela tarefa é obrigatório.');
+        if ('responsible' in data && (!data.responsible || !data.responsible.trim())) {
+            req.reject(400, 'O responsável não pode ficar vazio.');
         }
     });
 
@@ -66,10 +51,10 @@ module.exports = cds.service.impl(async function () {
 
             switch (task.status) {
                 case 'DONE':
-                    task.criticality_status = 3; 
+                    task.criticality_status = 3;
                     break;
                 case 'DOING':
-                    task.criticality_status = 2; 
+                    task.criticality_status = 2;
                     break;
                 case 'TO-DO':
                     task.criticality_status = 0;
@@ -80,13 +65,13 @@ module.exports = cds.service.impl(async function () {
 
             switch (task.priority) {
                 case 'HIGH':
-                    task.criticality_priority = 1; 
+                    task.criticality_priority = 1;
                     break;
                 case 'MEDIUM':
-                    task.criticality_priority = 2; 
+                    task.criticality_priority = 2;
                     break;
                 case 'LOW':
-                    task.criticality_priority = 3; 
+                    task.criticality_priority = 3;
                     break;
                 default:
                     task.criticality_priority = 0;
